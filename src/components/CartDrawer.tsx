@@ -3,17 +3,26 @@ import { X, Minus, Plus, Trash2, ShoppingCart, MessageCircle } from "lucide-reac
 import { useCart } from "@/context/CartContext";
 
 const WHATSAPP_NUMBER = "919891025223";
+const DELIVERY_CHARGE = 30;
+const FREE_DELIVERY_THRESHOLD = 250;
 
 function buildWhatsAppMessage(
   cart: ReturnType<typeof useCart>["cart"],
-  total: number
+  subtotal: number,
+  deliveryCharge: number
 ): string {
   const lines = cart.map((c) => {
     const sizePart = c.size ? ` (${c.size})` : "";
     return `• ${c.item.name}${sizePart} x${c.quantity} — ₹${c.price * c.quantity}`;
   });
   lines.push("");
-  lines.push(`*Total: ₹${total}*`);
+  lines.push(`Subtotal: ₹${subtotal}`);
+  if (deliveryCharge > 0) {
+    lines.push(`Delivery Charge: ₹${deliveryCharge}`);
+  } else {
+    lines.push(`Delivery: FREE`);
+  }
+  lines.push(`*Grand Total: ₹${subtotal + deliveryCharge}*`);
   lines.push("");
   lines.push("Please confirm my order. Thank you!");
   return encodeURIComponent("*New Order from Panchaiyat Website*\n\n" + lines.join("\n"));
@@ -27,8 +36,11 @@ type Props = {
 export function CartDrawer({ open, onClose }: Props) {
   const { cart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
 
+  const deliveryCharge = totalPrice > 0 && totalPrice < FREE_DELIVERY_THRESHOLD ? DELIVERY_CHARGE : 0;
+  const grandTotal = totalPrice + deliveryCharge;
+
   const handleWhatsApp = () => {
-    const msg = buildWhatsAppMessage(cart, totalPrice);
+    const msg = buildWhatsAppMessage(cart, totalPrice, deliveryCharge);
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
   };
 
@@ -142,16 +154,39 @@ export function CartDrawer({ open, onClose }: Props) {
 
             {/* Footer */}
             {cart.length > 0 && (
-              <div className="px-6 py-5 border-t border-border space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground text-sm uppercase tracking-wider">Total</span>
-                  <span className="font-display text-3xl text-saffron">₹{totalPrice}</span>
+              <div className="px-6 py-5 border-t border-border space-y-3">
+
+                {/* Subtotal */}
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground uppercase tracking-wider">Subtotal</span>
+                  <span className="text-foreground font-semibold">₹{totalPrice}</span>
                 </div>
-                {totalPrice < 250 && (
+
+                {/* Delivery charge row */}
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground uppercase tracking-wider">Delivery</span>
+                  {deliveryCharge > 0 ? (
+                    <span className="text-amber-400 font-semibold">₹{deliveryCharge}</span>
+                  ) : (
+                    <span className="text-green-400 font-semibold">FREE</span>
+                  )}
+                </div>
+
+                {/* Free delivery nudge */}
+                {deliveryCharge > 0 && (
                   <p className="text-xs text-amber-400 bg-amber-400/10 border border-amber-400/20 rounded-lg px-3 py-2">
-                    Add ₹{250 - totalPrice} more for free delivery (min order ₹250)
+                    Add ₹{FREE_DELIVERY_THRESHOLD - totalPrice} more for free delivery
                   </p>
                 )}
+
+                {/* Divider */}
+                <div className="border-t border-border pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground text-sm uppercase tracking-wider">Grand Total</span>
+                    <span className="font-display text-3xl text-saffron">₹{grandTotal}</span>
+                  </div>
+                </div>
+
                 <button
                   onClick={handleWhatsApp}
                   className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-green-600 hover:bg-green-500 text-white font-display tracking-widest text-lg transition glow-saffron"
