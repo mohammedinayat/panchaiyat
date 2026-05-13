@@ -45,11 +45,11 @@ export const menu: MenuItem[] = [
   { name: "Veg Cheesy Maggie", price: 50, diet: "veg", category: "MAGGIE" },
 
   // VEG PIZZA
-  { name: "Margherita", note: "Single Cheese", sizes: { S: 70, M: 130, L: 200 }, diet: "veg", category: "VEG PIZZA" },
-  { name: "Margherita", note: "Double Cheese", sizes: { S: 90, M: 150, L: 220 }, diet: "veg", category: "VEG PIZZA" },
-  { name: "Tomato & Corn", sizes: { S: 110, M: 180, L: 250 }, diet: "veg", category: "VEG PIZZA" },
-  { name: "Simple Veg", note: "Onion, Capsicum, Corn", sizes: { S: 120, M: 190, L: 260 }, diet: "veg", category: "VEG PIZZA" },
-  { name: "Supreme Veg", note: "Onion, Capsicum, Corn, Olive", sizes: { S: 130, M: 200, L: 270 }, diet: "veg", category: "VEG PIZZA" },
+  { name: "Margherita Pizza", note: "Single Cheese", sizes: { S: 70, M: 130, L: 200 }, diet: "veg", category: "VEG PIZZA" },
+  { name: "Margherita Pizza", note: "Double Cheese", sizes: { S: 90, M: 150, L: 220 }, diet: "veg", category: "VEG PIZZA" },
+  { name: "Tomato & Corn Pizza", sizes: { S: 110, M: 180, L: 250 }, diet: "veg", category: "VEG PIZZA" },
+  { name: "Simple Veg Pizza", note: "Onion, Capsicum, Corn", sizes: { S: 120, M: 190, L: 260 }, diet: "veg", category: "VEG PIZZA" },
+  { name: "Supreme Veg Pizza", note: "Onion, Capsicum, Corn, Olive", sizes: { S: 130, M: 200, L: 270 }, diet: "veg", category: "VEG PIZZA" },
 
   // CHICKEN PIZZA
   { name: "Delight Chicken Pizza", note: "Chicken Cubes", sizes: { S: 130, M: 200, L: 300 }, diet: "nonveg", category: "CHICKEN PIZZA" },
