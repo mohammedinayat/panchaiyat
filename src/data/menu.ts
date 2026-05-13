@@ -21,24 +21,23 @@ export const categories = [
 
 export const menu: MenuItem[] = [
   // MOMOS
-  { name: "Chicken Steam", price: 80, diet: "nonveg", category: "MOMOS" },
-  { name: "Chicken Fried", price: 100, diet: "nonveg", category: "MOMOS" },
-  { name: "Chicken Kurkuro", price: 130, diet: "nonveg", category: "MOMOS" },
-  { name: "Chicken Gravy", price: 130, diet: "nonveg", category: "MOMOS" },
+  { name: "Chicken Steam Momos", price: 80, diet: "nonveg", category: "MOMOS" },
+  { name: "Chicken Fried Momos", price: 100, diet: "nonveg", category: "MOMOS" },
+  { name: "Chicken Steam Cheese Momos", price: 100, diet: "nonveg", category: "MOMOS" },
+  { name: "Chicken Fried Cheese Momos", price: 120, diet: "nonveg", category: "MOMOS" },
 
   // BURGERS
-  { name: "Veg Classic", price: 50, diet: "veg", category: "BURGERS" },
-  { name: "Veg Cheesy", price: 70, diet: "veg", category: "BURGERS" },
-  { name: "Veg BBQ", price: 60, diet: "veg", category: "BURGERS" },
-  { name: "Chicken Cheesy BBQ", price: 80, note: "Double Cheese", diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Classic", price: 80, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Cheesy", price: 100, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken BBQ", price: 90, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Cheesy BBQ", price: 100, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Zinger", price: 100, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Cheesy Zinger", price: 120, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Zinger BBQ", price: 110, diet: "nonveg", category: "BURGERS" },
-  { name: "Chicken Cheesy Zinger BBQ", price: 130, diet: "nonveg", category: "BURGERS" },
+  { name: "Veg Classic Burger", price: 50, diet: "veg", category: "BURGERS" },
+  { name: "Veg Cheesy Burger", price: 70, diet: "veg", category: "BURGERS" },
+  { name: "Veg BBQ Burger", price: 60, diet: "veg", category: "BURGERS" },
+  { name: "Chicken Classic Burger", price: 80, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Cheesy Burger", price: 100, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken BBQ Burger", price: 90, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Cheesy BBQ Burger", price: 110, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Zinger Burger", price: 100, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Cheesy Zinger Burger", price: 120, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Zinger BBQ Burger", price: 110, diet: "nonveg", category: "BURGERS" },
+  { name: "Chicken Cheesy Zinger BBQ Burger", price: 130, diet: "nonveg", category: "BURGERS" },
 
   // MAGGIE
   { name: "Plain Maggie", price: 30, diet: "veg", category: "MAGGIE" },
@@ -51,15 +50,13 @@ export const menu: MenuItem[] = [
   { name: "Tomato & Corn", sizes: { S: 110, M: 180, L: 250 }, diet: "veg", category: "VEG PIZZA" },
   { name: "Simple Veg", note: "Onion, Capsicum, Corn", sizes: { S: 120, M: 190, L: 260 }, diet: "veg", category: "VEG PIZZA" },
   { name: "Supreme Veg", note: "Onion, Capsicum, Corn, Olive", sizes: { S: 130, M: 200, L: 270 }, diet: "veg", category: "VEG PIZZA" },
-  { name: "Veg Kulhad", note: "Onion, Capsicum, Corn", price: 60, diet: "veg", category: "VEG PIZZA" },
 
   // CHICKEN PIZZA
-  { name: "Delight Chicken", note: "Chicken Cubes", sizes: { S: 130, M: 200, L: 300 }, diet: "nonveg", category: "CHICKEN PIZZA" },
-  { name: "Chicken & Corn", note: "Capsicum, Corn, Chicken Cubes", sizes: { S: 140, M: 220, L: 320 }, diet: "nonveg", category: "CHICKEN PIZZA" },
-  { name: "Tandoori Chicken", note: "Onion, Capsicum, Tomato, Chicken Cubes", sizes: { S: 150, M: 230, L: 330 }, diet: "nonveg", category: "CHICKEN PIZZA" },
-  { name: "BBQ Chicken", note: "Onion, Olive, Chicken Cubes", sizes: { S: 160, M: 240, L: 340 }, diet: "nonveg", category: "CHICKEN PIZZA" },
-  { name: "Supreme Chicken", note: "Capsicum, Corn, Olive, Chicken Cubes", sizes: { S: 170, M: 250, L: 350 }, diet: "nonveg", category: "CHICKEN PIZZA" },
-  { name: "Chicken Kulhad", note: "Onion, Capsicum, Corn, Chicken Cubes", price: 80, diet: "nonveg", category: "CHICKEN PIZZA" },
+  { name: "Delight Chicken Pizza", note: "Chicken Cubes", sizes: { S: 130, M: 200, L: 300 }, diet: "nonveg", category: "CHICKEN PIZZA" },
+  { name: "Chicken & Corn Pizza", note: "Capsicum, Corn, Chicken Cubes", sizes: { S: 140, M: 220, L: 320 }, diet: "nonveg", category: "CHICKEN PIZZA" },
+  { name: "Tandoori Chicken Pizza", note: "Onion, Capsicum, Tomato, Chicken Cubes", sizes: { S: 150, M: 230, L: 330 }, diet: "nonveg", category: "CHICKEN PIZZA" },
+  { name: "BBQ Chicken Pizza", note: "Onion, Olive, Chicken Cubes", sizes: { S: 160, M: 240, L: 340 }, diet: "nonveg", category: "CHICKEN PIZZA" },
+  { name: "Supreme Chicken Pizza", note: "Capsicum, Corn, Olive, Chicken Cubes", sizes: { S: 170, M: 250, L: 350 }, diet: "nonveg", category: "CHICKEN PIZZA" },
 
   // FRIES & WRAPS
   { name: "Salted Fries", price: 60, diet: "veg", category: "FRIES & WRAPS" },
