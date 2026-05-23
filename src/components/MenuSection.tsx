@@ -1,17 +1,24 @@
-import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Plus, Check } from "lucide-react";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { ShoppingCart, Check } from "lucide-react";
 import { menu, categories, type Diet, type MenuItem } from "@/data/menu";
 import { useCart } from "@/context/CartContext";
 
-type Filter = "all" | "veg" | "nonveg" | "beverage";
+// Emoji icons for each category tab
+const categoryIcons: Record<string, string> = {
+  MOMOS: "🥟",
+  BURGERS: "🍔",
+  MAGGIE: "🍜",
+  "VEG PIZZA": "🍕",
+  "CHICKEN PIZZA": "🍗",
+  "FRIES & WRAPS": "🍟",
+  "QUICK BITES": "🍿",
+  "SHAKES & COFFEE": "🥤",
+};
 
-const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "veg", label: "Veg" },
-  { id: "nonveg", label: "Non-Veg" },
-  { id: "beverage", label: "Beverages" },
-];
+function getCategoryId(cat: string) {
+  return "cat-" + cat.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
 
 // Category images from Unsplash (free to use)
 const categoryImages: Record<string, string> = {
@@ -234,14 +241,50 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
 }
 
 export function MenuSection() {
-  const [filter, setFilter] = useState<Filter>("all");
+  const [activeCategory, setActiveCategory] = useState<string>(categories[0]);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   const grouped = useMemo(() => {
     return categories.map((cat) => ({
       cat,
-      items: menu.filter((m) => m.category === cat && (filter === "all" || m.diet === filter)),
-    })).filter((g) => g.items.length > 0);
-  }, [filter]);
+      items: menu.filter((m) => m.category === cat),
+    }));
+  }, []);
+
+  // Highlight the tab whose section is currently in view
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    categories.forEach((cat) => {
+      const el = document.getElementById(getCategoryId(cat));
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveCategory(cat);
+        },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  // Scroll the active tab button into view inside the tab bar
+  useEffect(() => {
+    if (!tabsRef.current) return;
+    const activeBtn = tabsRef.current.querySelector<HTMLButtonElement>(
+      `[data-cat="${activeCategory}"]`
+    );
+    activeBtn?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [activeCategory]);
+
+  const scrollToCategory = (cat: string) => {
+    const el = document.getElementById(getCategoryId(cat));
+    if (!el) return;
+    const offset = 80; // navbar + tab bar height
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   return (
     <section id="menu" className="py-24 md:py-32 relative">
@@ -254,48 +297,55 @@ export function MenuSection() {
           <p className="text-muted-foreground mt-3">All prices in ₹ · For pizza, select one or more sizes to add to cart</p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-14 sticky top-16 z-30 py-3 bg-background/70 backdrop-blur-md -mx-5 px-5">
-          {filters.map((f) => (
+        {/* Category quick-jump tabs */}
+        <div
+          ref={tabsRef}
+          className="flex gap-2 mb-14 sticky top-16 z-30 py-3 bg-background/70 backdrop-blur-md -mx-5 px-5 overflow-x-auto scrollbar-hide"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {categories.map((cat) => (
             <button
-              key={f.id}
-              onClick={() => setFilter(f.id)}
-              className={`px-5 py-2 rounded-full text-sm uppercase tracking-widest font-semibold border transition ${
-                filter === f.id
+              key={cat}
+              data-cat={cat}
+              onClick={() => scrollToCategory(cat)}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border transition whitespace-nowrap ${
+                activeCategory === cat
                   ? "bg-saffron text-primary-foreground border-saffron"
                   : "border-border text-muted-foreground hover:text-saffron hover:border-saffron"
               }`}
             >
-              {f.label}
+              <span>{categoryIcons[cat]}</span>
+              <span className="uppercase tracking-wider text-xs">{cat}</span>
             </button>
           ))}
         </div>
 
         <div className="space-y-16">
-          <AnimatePresence mode="popLayout">
-            {grouped.map((group) => (
-              <motion.div
-                key={group.cat}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-              >
-                <div className="flex items-end gap-4 mb-6">
-                  <h3 className="font-display text-3xl md:text-4xl text-foreground">{group.cat}</h3>
-                  <div className="flex-1 h-px bg-gradient-to-r from-saffron/60 to-transparent mb-2" />
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
-                    {group.items.length} items
-                  </span>
-                </div>
+          {grouped.map((group) => (
+            <motion.div
+              key={group.cat}
+              id={getCategoryId(group.cat)}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="flex items-end gap-4 mb-6">
+                <span className="text-3xl">{categoryIcons[group.cat]}</span>
+                <h3 className="font-display text-3xl md:text-4xl text-foreground">{group.cat}</h3>
+                <div className="flex-1 h-px bg-gradient-to-r from-saffron/60 to-transparent mb-2" />
+                <span className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                  {group.items.length} items
+                </span>
+              </div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {group.items.map((item, i) => (
-                    <MenuCard key={`${item.category}-${item.name}-${i}`} item={item} index={i} />
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {group.items.map((item, i) => (
+                  <MenuCard key={`${item.category}-${item.name}-${i}`} item={item} index={i} />
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
