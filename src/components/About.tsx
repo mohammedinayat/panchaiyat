@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, Truck, IndianRupee } from "lucide-react";
-import aboutImg from "@/assets/about.jpg";
+import aboutImg from "@/assets/logo.jpeg";
 import { ADDRESS } from "@/data/menu";
 
 export function About() {
@@ -17,7 +17,7 @@ export function About() {
           <div className="absolute -inset-4 bg-gradient-to-br from-saffron/30 to-ember/20 rounded-2xl blur-2xl" />
           <img
             src={aboutImg}
-            alt="Spread of Panchaiyat food"
+            alt="Panchaiyat Cafe & Kitchen logo"
             width={1280}
             height={1280}
             loading="lazy"
