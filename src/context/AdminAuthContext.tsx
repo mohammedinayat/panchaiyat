@@ -1,48 +1,52 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-
-const ADMIN_EMAIL = "danish@panchaiyat";
-const ADMIN_PASSWORD = "Mohddanish@panchaiyat";
-
-type AdminUser = { email: string };
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from "react";
+import { supabase } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
 
 type AdminAuthContextType = {
-  user: AdminUser | null;
+  user: User | null;
   login: (email: string, password: string) => Promise<{ error: string | null }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 };
 
 const AdminAuthContext = createContext<AdminAuthContextType | null>(null);
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AdminUser | null>(() => {
-    try {
-      const stored = sessionStorage.getItem("admin_user");
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Restore session on mount
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+      setIsLoading(false);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
-    // Simulate async — swap this block with Supabase auth when ready
-    await new Promise((r) => setTimeout(r, 600));
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     setIsLoading(false);
-
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      const u = { email };
-      setUser(u);
-      sessionStorage.setItem("admin_user", JSON.stringify(u));
-      return { error: null };
-    }
-    return { error: "Invalid email or password" };
+    if (error) return { error: error.message };
+    return { error: null };
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    sessionStorage.removeItem("admin_user");
   }, []);
 
   return (

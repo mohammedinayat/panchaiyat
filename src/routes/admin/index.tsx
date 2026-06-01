@@ -14,15 +14,27 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/admin/dashboard" });
-  }, [user, navigate]);
+    if (!isLoading && user) navigate({ to: "/admin/dashboard" });
+  }, [user, isLoading, navigate]);
+
+  // Show spinner while restoring session
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-saffron border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSubmitting(true);
     const result = await login(email, password);
+    setSubmitting(false);
     if (result.error) {
       setError(result.error);
     } else {
@@ -106,10 +118,10 @@ function AdminLogin() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={submitting}
               className="w-full py-3 rounded-lg bg-saffron text-primary-foreground font-display text-lg tracking-widest hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed mt-2"
             >
-              {isLoading ? "SIGNING IN..." : "SIGN IN"}
+              {submitting ? "SIGNING IN..." : "SIGN IN"}
             </button>
           </form>
         </div>

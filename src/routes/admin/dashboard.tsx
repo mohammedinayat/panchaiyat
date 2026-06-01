@@ -20,13 +20,34 @@ export const Route = createFileRoute("/admin/dashboard")({
 function AdminDashboard() {
   const { user } = useAdminAuth();
   const navigate = useNavigate();
-  const { items, categories } = useMenuStore();
+  const { items, categories, loading, error, refresh } = useMenuStore();
 
   useEffect(() => {
     if (!user) navigate({ to: "/admin/" });
   }, [user, navigate]);
 
   if (!user) return null;
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="w-8 h-8 border-2 border-saffron border-t-transparent rounded-full animate-spin" />
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="flex flex-col items-center justify-center h-64 gap-4">
+          <p className="text-destructive">{error}</p>
+          <button onClick={refresh} className="px-4 py-2 rounded-lg bg-saffron text-primary-foreground text-sm">Retry</button>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   const totalItems = items.length;
   const outOfStock = items.filter((i) => i.outOfStock).length;
