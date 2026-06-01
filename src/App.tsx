@@ -9,8 +9,29 @@ import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CartButton } from "@/components/CartButton";
+import { AdminAuthProvider } from "@/context/AdminAuthContext";
+import { MenuStoreProvider } from "@/context/MenuStoreContext";
+import { AdminApp } from "@/components/admin/AdminApp";
+
+// Simple path-based router — no library needed
+const path = window.location.pathname;
+const isAdmin = path.startsWith("/admin");
 
 export default function App() {
+  if (isAdmin) {
+    return (
+      <AdminAuthProvider>
+        <MenuStoreProvider>
+          <AdminApp />
+        </MenuStoreProvider>
+      </AdminAuthProvider>
+    );
+  }
+
+  return <PublicSite />;
+}
+
+function PublicSite() {
   const [cartOpen, setCartOpen] = useState(false);
 
   return (

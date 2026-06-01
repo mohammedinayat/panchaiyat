@@ -1,14 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "@tanstack/react-router";
-import {
-  LayoutDashboard,
-  UtensilsCrossed,
-  Tag,
-  LogOut,
-  Menu,
-  X,
-  ChefHat,
-} from "lucide-react";
+import { LayoutDashboard, UtensilsCrossed, Tag, LogOut, Menu, X, ChefHat } from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 
 const NAV = [
@@ -17,30 +8,37 @@ const NAV = [
   { to: "/admin/categories", label: "Categories", icon: Tag },
 ];
 
-export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAdminAuth();
-  const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+type Props = {
+  children: React.ReactNode;
+  navigate: (to: string) => void;
+};
 
-  const handleLogout = () => {
-    logout();
+export function AdminLayout({ children, navigate }: Props) {
+  const { user, logout } = useAdminAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const currentPath = window.location.pathname;
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/admin/");
+  };
+
+  const handleNav = (to: string) => {
+    navigate(to);
+    setSidebarOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 z-40 bg-black/60 md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col transition-transform duration-300
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:z-auto`}
-      >
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col transition-transform duration-300
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:z-auto`}>
+
         {/* Logo */}
         <div className="h-16 flex items-center gap-3 px-5 border-b border-border">
           <div className="w-9 h-9 rounded-md bg-gradient-to-br from-saffron to-ember grid place-items-center">
@@ -50,10 +48,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             <div className="font-display text-lg tracking-wider text-foreground">PANCHAIYAT</div>
             <div className="text-[10px] tracking-widest text-muted-foreground">ADMIN PANEL</div>
           </div>
-          <button
-            className="ml-auto md:hidden text-muted-foreground hover:text-foreground"
-            onClick={() => setSidebarOpen(false)}
-          >
+          <button className="ml-auto md:hidden text-muted-foreground hover:text-foreground" onClick={() => setSidebarOpen(false)}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -61,21 +56,15 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {NAV.map(({ to, label, icon: Icon }) => {
-            const active = location.pathname === to;
+            const active = currentPath === to || currentPath.startsWith(to);
             return (
-              <Link
-                key={to}
-                to={to}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                  active
-                    ? "bg-saffron/15 text-saffron border border-saffron/30"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
-                }`}
-              >
+              <button key={to} onClick={() => handleNav(to)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  active ? "bg-saffron/15 text-saffron border border-saffron/30" : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                }`}>
                 <Icon className="w-4 h-4 flex-shrink-0" />
                 {label}
-              </Link>
+              </button>
             );
           })}
         </nav>
@@ -91,10 +80,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               <div className="text-[10px] text-muted-foreground">Administrator</div>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition"
-          >
+          <button onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition">
             <LogOut className="w-4 h-4" />
             Sign out
           </button>
@@ -105,10 +92,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar (mobile) */}
         <header className="h-16 flex items-center gap-4 px-5 border-b border-border bg-card/50 backdrop-blur md:hidden">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <button onClick={() => setSidebarOpen(true)} className="text-muted-foreground hover:text-foreground">
             <Menu className="w-5 h-5" />
           </button>
           <span className="font-display text-lg tracking-wider">ADMIN</span>
