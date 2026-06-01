@@ -57,10 +57,8 @@ const Spinner = () => (
 );
 
 export default function App() {
-  // Strip the GitHub Pages base path so routing works correctly
-  const rawPath = window.location.pathname;
-  const path = rawPath.replace(/^\/panchaiyat/, "") || "/";
-  const isAdmin = path === "/admin" || path.startsWith("/admin/");
+  const path = window.location.pathname;
+  const isAdmin = path === "/admin" || path.startsWith("/admin/") || path.includes("/admin");
 
   if (isAdmin) {
     return (

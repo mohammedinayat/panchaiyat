@@ -7,15 +7,14 @@ import AdminCategories from "@/pages/admin/AdminCategories";
 
 type AdminPage = "login" | "dashboard" | "menu" | "categories";
 
-const BASE = "/panchaiyat";
+const BASE = "";
 
 function getPage(): AdminPage {
-  const raw = window.location.pathname;
-  const path = raw.replace(/^\/panchaiyat/, "") || "/";
-  if (path === "/admin" || path === "/admin/") return "login";
-  if (path.startsWith("/admin/dashboard")) return "dashboard";
-  if (path.startsWith("/admin/menu")) return "menu";
-  if (path.startsWith("/admin/categories")) return "categories";
+  const path = window.location.pathname;
+  if (path === "/admin" || path === "/admin/" || path.endsWith("/admin") || path.endsWith("/admin/")) return "login";
+  if (path.includes("/admin/dashboard")) return "dashboard";
+  if (path.includes("/admin/menu")) return "menu";
+  if (path.includes("/admin/categories")) return "categories";
   return "login";
 }
 
@@ -25,7 +24,7 @@ export function AdminApp() {
 
   // Navigate helper — updates URL and re-renders
   const navigate = (to: string) => {
-    window.history.pushState({}, "", BASE + to);
+    window.history.pushState({}, "", to);
     setPage(getPage());
   };
 
