@@ -83,7 +83,7 @@ export default function AdminLogin({ navigate }: Props) {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          <a href="/" className="hover:text-saffron transition">← Back to website</a>
+          <a href="/panchaiyat/" className="hover:text-saffron transition">← Back to website</a>
         </p>
       </div>
     </div>

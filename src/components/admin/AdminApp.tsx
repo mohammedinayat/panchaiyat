@@ -7,8 +7,11 @@ import AdminCategories from "@/pages/admin/AdminCategories";
 
 type AdminPage = "login" | "dashboard" | "menu" | "categories";
 
+const BASE = "/panchaiyat";
+
 function getPage(): AdminPage {
-  const path = window.location.pathname;
+  const raw = window.location.pathname;
+  const path = raw.replace(/^\/panchaiyat/, "") || "/";
   if (path === "/admin" || path === "/admin/") return "login";
   if (path.startsWith("/admin/dashboard")) return "dashboard";
   if (path.startsWith("/admin/menu")) return "menu";
@@ -22,7 +25,7 @@ export function AdminApp() {
 
   // Navigate helper — updates URL and re-renders
   const navigate = (to: string) => {
-    window.history.pushState({}, "", to);
+    window.history.pushState({}, "", BASE + to);
     setPage(getPage());
   };
 
