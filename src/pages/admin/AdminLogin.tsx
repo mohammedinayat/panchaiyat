@@ -51,7 +51,7 @@ export default function AdminLogin({ navigate }: Props) {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-secondary/50 border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-saffron transition"
-                  placeholder="danish.panchaiyat@gmail.com" autoComplete="username" />
+                  placeholder="Enter your email" autoComplete="username" />
               </div>
             </div>
 
