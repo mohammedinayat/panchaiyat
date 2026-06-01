@@ -29,6 +29,7 @@ export type DbMenuItem = {
   size_m: number | null;
   size_l: number | null;
   note: string | null;
+  image_url: string | null;
   out_of_stock: boolean;
   featured: boolean;
   created_at?: string;

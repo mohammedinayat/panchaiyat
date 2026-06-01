@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { X } from "lucide-react";
+import { X, ImageIcon } from "lucide-react";
 import type { AdminMenuItem } from "@/context/MenuStoreContext";
 import type { AdminCategory } from "@/context/MenuStoreContext";
 
@@ -20,6 +20,7 @@ const schema = z.object({
   price: z.coerce.number().optional(),
   sizes: sizeSchema.optional(),
   note: z.string().optional(),
+  imageUrl: z.string().optional(),
   outOfStock: z.boolean(),
   featured: z.boolean(),
 }).refine((d) => {
@@ -55,6 +56,7 @@ export function ItemFormModal({ open, onClose, onSave, initial, categories }: Pr
       price: undefined,
       sizes: { S: 0, M: 0, L: 0 },
       note: "",
+      imageUrl: "",
       outOfStock: false,
       featured: false,
     },
@@ -72,6 +74,7 @@ export function ItemFormModal({ open, onClose, onSave, initial, categories }: Pr
         price: initial.price,
         sizes: initial.sizes ?? { S: 0, M: 0, L: 0 },
         note: initial.note ?? "",
+        imageUrl: initial.imageUrl ?? "",
         outOfStock: initial.outOfStock,
         featured: initial.featured,
       });
@@ -84,6 +87,7 @@ export function ItemFormModal({ open, onClose, onSave, initial, categories }: Pr
         price: undefined,
         sizes: { S: 0, M: 0, L: 0 },
         note: "",
+        imageUrl: "",
         outOfStock: false,
         featured: false,
       });
@@ -100,6 +104,7 @@ export function ItemFormModal({ open, onClose, onSave, initial, categories }: Pr
       price: data.hasSizes ? undefined : data.price,
       sizes: data.hasSizes ? data.sizes : undefined,
       note: data.note || undefined,
+      imageUrl: data.imageUrl || undefined,
       outOfStock: data.outOfStock,
       featured: data.featured,
     });
@@ -233,6 +238,37 @@ export function ItemFormModal({ open, onClose, onSave, initial, categories }: Pr
               className="w-full bg-secondary/50 border border-border rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-saffron transition"
               placeholder="e.g. Onion, Capsicum, Corn"
             />
+          </div>
+
+          {/* Image URL */}
+          <div>
+            <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-1.5">
+              Image URL (optional)
+            </label>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input
+                  {...register("imageUrl")}
+                  className="w-full bg-secondary/50 border border-border rounded-lg pl-10 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-saffron transition"
+                  placeholder="https://images.unsplash.com/..."
+                />
+              </div>
+            </div>
+            {/* Preview */}
+            {watch("imageUrl") && (
+              <div className="mt-2 relative h-24 rounded-lg overflow-hidden border border-border bg-secondary/30">
+                <img
+                  src={watch("imageUrl")}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">
+              Paste any image URL. Use <a href="https://unsplash.com" target="_blank" rel="noreferrer" className="text-saffron hover:underline">Unsplash</a> for free food photos.
+            </p>
           </div>
 
           {/* Flags */}

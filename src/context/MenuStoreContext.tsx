@@ -50,6 +50,7 @@ export type AdminMenuItem = {
   price?: number;
   sizes?: { S: number; M: number; L: number };
   note?: string;
+  imageUrl?: string;
   outOfStock: boolean;
   featured: boolean;
 };
@@ -75,6 +76,7 @@ function dbToItem(row: DbMenuItem): AdminMenuItem {
         ? { S: row.size_s, M: row.size_m, L: row.size_l }
         : undefined,
     note: row.note ?? undefined,
+    imageUrl: row.image_url ?? undefined,
     outOfStock: row.out_of_stock,
     featured: row.featured,
   };
@@ -156,6 +158,7 @@ export function MenuStoreProvider({ children }: { children: ReactNode }) {
       size_m: item.sizes?.M ?? null,
       size_l: item.sizes?.L ?? null,
       note: item.note ?? null,
+      image_url: item.imageUrl ?? null,
       out_of_stock: item.outOfStock,
       featured: item.featured,
     };
@@ -176,6 +179,7 @@ export function MenuStoreProvider({ children }: { children: ReactNode }) {
       row.size_l = patch.sizes?.L ?? null;
     }
     if (patch.note !== undefined) row.note = patch.note ?? null;
+    if (patch.imageUrl !== undefined) row.image_url = patch.imageUrl ?? null;
     if (patch.outOfStock !== undefined) row.out_of_stock = patch.outOfStock;
     if (patch.featured !== undefined) row.featured = patch.featured;
 
