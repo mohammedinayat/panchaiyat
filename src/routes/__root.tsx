@@ -7,6 +7,8 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { AdminAuthProvider } from "@/context/AdminAuthContext";
+import { MenuStoreProvider } from "@/context/MenuStoreContext";
 
 import "../styles.css";
 
@@ -118,7 +120,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AdminAuthProvider>
+        <MenuStoreProvider>
+          <Outlet />
+        </MenuStoreProvider>
+      </AdminAuthProvider>
     </QueryClientProvider>
   );
 }
