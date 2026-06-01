@@ -22,6 +22,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
@@ -88,7 +92,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition"
           >
             <LogOut className="w-4 h-4" />
