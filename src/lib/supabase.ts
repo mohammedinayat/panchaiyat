@@ -1,12 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-// Graceful fallback — won't crash the public site if env vars are missing
+// Only create the client if both env vars are present
 export const supabase = createClient(
-  supabaseUrl || "https://placeholder.supabase.co",
-  supabaseAnonKey || "placeholder"
+  supabaseUrl ?? "https://ckhsiutjaqjcptzhriya.supabase.co",
+  supabaseAnonKey ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNraHNpdXRqYXFqY3B0emhyaXlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMTE5MzcsImV4cCI6MjA5NTg4NzkzN30.MD1Cr1hU6jCKtSDRuKEl35uFIvw2QmLTh15J8zkeF2I"
 );
 
 // ─── Database types ────────────────────────────────────────────────────────────
